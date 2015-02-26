@@ -7,6 +7,7 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 
+import com.technobitia.ted.response.PlaylistListResponse;
 import com.technobitia.ted.response.TalkListResponse;
 
 public class TedClient {
@@ -37,5 +38,15 @@ public class TedClient {
                      .queryParam("api-key", apiKey);
         TalkListResponse talkListResponse = endpointTarget.request().get(TalkListResponse.class);
         return talkListResponse;
+    }
+    
+    public PlaylistListResponse getPlaylists() {
+
+        WebTarget endpointTarget =
+                baseTargetApi
+                     .path("playlists.json")
+                     .queryParam("api-key", apiKey);
+        PlaylistListResponse playlistListResponse = endpointTarget.request().get(PlaylistListResponse.class);
+        return playlistListResponse;
     }
 }
