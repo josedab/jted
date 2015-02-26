@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.technobitia.ted.model.Talk;
 
 @JsonIgnoreProperties
-public class TalkListResponse {
+public final class TalkListResponse extends AbstractCountListResponse {
     private List<Talk> talks;
 
     public List<Talk> getTalks() {
