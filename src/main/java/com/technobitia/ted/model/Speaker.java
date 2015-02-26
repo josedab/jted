@@ -2,11 +2,14 @@ package com.technobitia.ted.model;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties
 public class Speaker {
+    
+    private static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
     private int id;
     private String title;
@@ -31,9 +34,11 @@ public class Speaker {
     private String slug;
     
     @JsonProperty("published_at")
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern=DATE_FORMAT)
     private Date publishedAt;
     
     @JsonProperty("updated_at")
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern=DATE_FORMAT)
     private Date updatedAt;
 
     public int getId() {

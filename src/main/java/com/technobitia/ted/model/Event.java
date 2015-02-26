@@ -2,12 +2,15 @@ package com.technobitia.ted.model;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties
 public class Event {
 
+    private static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
+    
     private int id;
     private String name;
     private String description;
@@ -19,6 +22,7 @@ public class Event {
     private String url;
 
     @JsonProperty("starts_at")
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern=DATE_FORMAT)
     private Date startsAt;
 
     public int getId() {
