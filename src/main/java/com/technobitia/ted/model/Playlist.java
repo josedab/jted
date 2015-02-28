@@ -19,7 +19,7 @@ public class Playlist {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
     private Date createdAt;
 
-    @JsonProperty("updatedAt")
+    @JsonProperty("updated_at")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
     private Date updatedAt;
 
