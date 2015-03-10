@@ -7,8 +7,10 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import com.technobitia.ted.model.Playlist;
-import com.technobitia.ted.model.WrapperPlaylist;
 import com.technobitia.ted.response.PlaylistListResponse;
 import com.technobitia.ted.response.TalkListResponse;
 
@@ -24,7 +26,12 @@ public class TedClient {
     
     public TedClient(String apiKey) {
         checkNotNull(apiKey);
-        restClient = ClientBuilder.newClient();
+        
+        JacksonJsonProvider jacksonProvider = 
+        		new JacksonJsonProvider()
+					    .configure(DeserializationFeature.UNWRAP_ROOT_VALUE, true);
+        
+        restClient = ClientBuilder.newClient().register(jacksonProvider);
         baseTargetApi = restClient.target(TED_TALKS_API_BASE)
                                   .path(TED_API_VERSION);
         this.apiKey = apiKey; 
@@ -59,7 +66,7 @@ public class TedClient {
                      .path(PLAYLISTS_ENDPOINT)
                      .path(String.valueOf(id) + ".json")
                      .queryParam("api-key", apiKey);
-        WrapperPlaylist playlistResponse = endpointTarget.request().get(WrapperPlaylist.class);
-        return playlistResponse.getPlaylist();
+        Playlist playlist = endpointTarget.request().get(Playlist.class);
+        return playlist;
     }
 }
