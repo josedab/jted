@@ -11,7 +11,9 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import com.technobitia.ted.model.Playlist;
+import com.technobitia.ted.model.Speaker;
 import com.technobitia.ted.response.PlaylistListResponse;
+import com.technobitia.ted.response.SpeakerListResponse;
 import com.technobitia.ted.response.TalkListResponse;
 
 public class TedClient {
@@ -19,6 +21,7 @@ public class TedClient {
     private static final String TED_API_VERSION = "v1";
     
     private static final String PLAYLISTS_ENDPOINT = "playlists";
+    private static final String SPEAKERS_ENDPOINT = "speakers";
     
     private Client restClient;
     private WebTarget baseTargetApi;
@@ -53,7 +56,7 @@ public class TedClient {
 
         WebTarget endpointTarget =
                 baseTargetApi
-                     .path("playlists.json")
+                     .path(PLAYLISTS_ENDPOINT + ".json")
                      .queryParam("api-key", apiKey);
         PlaylistListResponse playlistListResponse = endpointTarget.request().get(PlaylistListResponse.class);
         return playlistListResponse;
@@ -68,5 +71,26 @@ public class TedClient {
                      .queryParam("api-key", apiKey);
         Playlist playlist = endpointTarget.request().get(Playlist.class);
         return playlist;
+    }
+
+    public SpeakerListResponse getSpeakers() {
+
+        WebTarget endpointTarget =
+                baseTargetApi
+                     .path(SPEAKERS_ENDPOINT + ".json")
+                     .queryParam("api-key", apiKey);
+        SpeakerListResponse speakerListResponse = endpointTarget.request().get(SpeakerListResponse.class);
+        return speakerListResponse;
+    }
+    
+    public Speaker getSpeakerById(int id) {
+
+        WebTarget endpointTarget =
+                baseTargetApi
+                     .path(SPEAKERS_ENDPOINT)
+                     .path(String.valueOf(id) + ".json")
+                     .queryParam("api-key", apiKey);
+        Speaker speaker = endpointTarget.request().get(Speaker.class);
+        return speaker;
     }
 }
