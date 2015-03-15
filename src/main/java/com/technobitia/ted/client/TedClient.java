@@ -8,13 +8,14 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import com.technobitia.ted.model.Playlist;
 import com.technobitia.ted.model.Speaker;
+import com.technobitia.ted.model.Theme;
 import com.technobitia.ted.response.PlaylistListResponse;
 import com.technobitia.ted.response.SpeakerListResponse;
 import com.technobitia.ted.response.TalkListResponse;
+import com.technobitia.ted.response.ThemeListResponse;
 
 public class TedClient {
     private static final String TED_TALKS_API_BASE = "https://api.ted.com";
@@ -22,6 +23,7 @@ public class TedClient {
     
     private static final String PLAYLISTS_ENDPOINT = "playlists";
     private static final String SPEAKERS_ENDPOINT = "speakers";
+    private static final String THEMES_ENDPOINT = "themes";
     
     private Client restClient;
     private WebTarget baseTargetApi;
@@ -92,5 +94,38 @@ public class TedClient {
                      .queryParam("api-key", apiKey);
         Speaker speaker = endpointTarget.request().get(Speaker.class);
         return speaker;
+    }
+    
+    public ThemeListResponse getThemes() {
+
+        WebTarget endpointTarget =
+                baseTargetApi
+                     .path(THEMES_ENDPOINT + ".json")
+                     .queryParam("api-key", apiKey);
+        ThemeListResponse themeListResponse = endpointTarget.request().get(ThemeListResponse.class);
+        return themeListResponse;
+    }
+    
+    public Theme getThemeById(int id) {
+
+        WebTarget endpointTarget =
+                baseTargetApi
+                     .path(THEMES_ENDPOINT)
+                     .path(String.valueOf(id) + ".json")
+                     .queryParam("api-key", apiKey);
+        Theme theme = endpointTarget.request().get(Theme.class);
+        return theme;
+    }
+    
+    public TalkListResponse getTalkListByThemeId(int themeId) {
+        checkArgument(themeId > 0, "Theme Id should be possitive");
+
+        WebTarget endpointTarget =
+                baseTargetApi.path(THEMES_ENDPOINT)
+                     .path(String.valueOf(themeId))
+                     .path("talks.json")
+                     .queryParam("api-key", apiKey);
+        TalkListResponse talkListResponse = endpointTarget.request().get(TalkListResponse.class);
+        return talkListResponse;
     }
 }
